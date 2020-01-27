@@ -101,7 +101,7 @@ def trainChatNN(X,y,vocabulary_length):
     model = Sequential()
 
     model.add(Input(input_dim[1]))
-    model.add(Embedding(vocabulary_length + 1,input_dim[1]//2,input_length = 1,mask_zero =  True))
+    model.add(Embedding(vocabulary_length + 1,input_dim[1]//2,mask_zero =  True))
     model.add(LSTM(input_dim[1]*3, activation = 'relu' , return_sequences = False))
     model.add(Dense(input_dim[1]*2, activation = 'relu'))
     model.add(Dense(output_classes,activation ='softmax'))
@@ -182,7 +182,8 @@ for n in numerized:
     padded.extend(list(pad_sequences(n, maxlen=MAX_SEQ_LENGTH)))
 padded = np.array(padded,dtype = 'float32')
 
-chatbot = trainChatNN(padded,labels,len(vocab))
+#chatbot = trainChatNN(padded,labels,len(vocab))
+chatbot = loadChatbot('chatbot.h5')
 
 user_in = input()
 predictStringInput(chatbot,user_in)

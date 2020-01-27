@@ -4,6 +4,7 @@ import io
 from chatbot import loadChatbot,predictStringInput
 
 
+
 app = flask.Flask(__name__)
 
 chatbot_model = loadChatbot('chatbot.h5')
@@ -18,10 +19,9 @@ def get_prediction():
     if flask.request.method == 'POST':
         data = flask.request.json  # Get data posted as a json
         if data == None:
-            data = flask.request.args
-        input = data.get('data')
-        prediction = predictStringInput(chatbot_model,input)  # runs globally loaded model on the data
-    return prediction
+            data = flask.request.data.decode('UTF-8')
+        prediction = predictStringInput(chatbot_model,data)  # runs globally loaded model on the data
+    return flask.Response(prediction,201,headers={'Access-Control-Allow-Origin':'*'})
 
 
 if __name__ == '__main__':
